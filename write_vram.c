@@ -33,11 +33,6 @@ struct BOOTINFO  {
     char  *vram;
 };
 
-static char font_A[16] = {
- 0x00, 0x18, 0x18, 0x18,0x18,0x24,0x24,0x24,0x24,0x7e,0x42,0x42,0x42,
- 0xe7, 0x00, 0x00
-};
-
 
 void  HariMain(void) {
     char *vram;
@@ -67,9 +62,12 @@ void  HariMain(void) {
     boxfill8(vram, xsize, COL8_848484, xsize-47, ysize-23, xsize-47, ysize-4);
     boxfill8(vram, xsize, COL8_FFFFFF, xsize-47, ysize-3,  xsize-4,  ysize-3);
     boxfill8(vram, xsize, COL8_FFFFFF, xsize-3,  ysize-24, xsize-3,  ysize-3);
- 
-    putFont8(binfo->vram, binfo->scrnx, 10, 10, COL8_FFFFFF, font_A);
 
+    extern char systemFont[16]; 
+
+    putFont8(binfo->vram, binfo->scrnx, 8, 8, COL8_FFFFFF, systemFont + 'A' * 16 );    
+
+     putFont8(binfo->vram, binfo->scrnx, 16, 8, COL8_FFFFFF, systemFont + 'B' * 16);
     for(;;) {
         io_hlt();
     }

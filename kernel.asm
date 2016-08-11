@@ -92,7 +92,6 @@ LABEL_BEGIN:
 
      mov  ax, SelectorVram
      mov  ds,  ax
-
 HariMain:; Function begin
         push    ebp                                     ; 0000 _ 55
         mov     ebp, esp                                ; 0001 _ 89. E5
@@ -335,17 +334,30 @@ HariMain:; Function begin
         mov     eax, dword [ebp-18H]                    ; 0279 _ 8B. 45, E8
         mov     eax, dword [eax+8H]                     ; 027C _ 8B. 40, 08
         sub     esp, 8                                  ; 027F _ 83. EC, 08
-        push    font_A                                  ; 0282 _ 68, 00000000(d)
+        push    systemFont+410H                         ; 0282 _ 68, 00000410(d)
         push    7                                       ; 0287 _ 6A, 07
-        push    10                                      ; 0289 _ 6A, 0A
-        push    10                                      ; 028B _ 6A, 0A
+        push    8                                       ; 0289 _ 6A, 08
+        push    8                                       ; 028B _ 6A, 08
         push    edx                                     ; 028D _ 52
         push    eax                                     ; 028E _ 50
         call    putFont8                                ; 028F _ E8, FFFFFFFC(rel)
         add     esp, 32                                 ; 0294 _ 83. C4, 20
-?_001:  call    io_hlt                                  ; 0297 _ E8, FFFFFFFC(rel)
-        jmp     ?_001                                   ; 029C _ EB, F9
-; HariMain End of function
+        mov     eax, dword [ebp-18H]                    ; 0297 _ 8B. 45, E8
+        movzx   eax, word [eax+4H]                      ; 029A _ 0F B7. 40, 04
+        movsx   edx, ax                                 ; 029E _ 0F BF. D0
+        mov     eax, dword [ebp-18H]                    ; 02A1 _ 8B. 45, E8
+        mov     eax, dword [eax+8H]                     ; 02A4 _ 8B. 40, 08
+        sub     esp, 8                                  ; 02A7 _ 83. EC, 08
+        push    systemFont+420H                         ; 02AA _ 68, 00000420(d)
+        push    7                                       ; 02AF _ 6A, 07
+        push    8                                       ; 02B1 _ 6A, 08
+        push    16                                      ; 02B3 _ 6A, 10
+        push    edx                                     ; 02B5 _ 52
+        push    eax                                     ; 02B6 _ 50
+        call    putFont8                                ; 02B7 _ E8, FFFFFFFC(rel)
+        add     esp, 32                                 ; 02BC _ 83. C4, 20
+?_001:  call    io_hlt                                  ; 02BF _ E8, FFFFFFFC(rel)
+        jmp     ?_001            
 
 
 boxfill8:; Function begin
@@ -684,7 +696,7 @@ table_rgb.1444:                                         ; byte
         db 00H, 84H, 84H, 00H, 00H, 00H, 84H, 84H       ; 0020 _ ........
         db 00H, 84H, 00H, 84H, 84H, 84H, 84H, 84H       ; 0028 _ ........
 
-
+%include "fontData.inc"
 
 SegCode32Len   equ  $ - LABEL_SEG_CODE32
 
